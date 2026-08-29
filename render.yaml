@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: emojibot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: EXTRA_EMOJI_STARS_PRICE
+        value: "2"
+      - key: WEBHOOK_URL
+        sync: false
