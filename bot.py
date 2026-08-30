@@ -10,7 +10,7 @@ from generator import generate_emoji
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
     print("ВНИМАНИЕ: BOT_TOKEN не найден в переменных окружения!")
-    BOT_TOKEN = "YOUR_BOT_TOKEN_HERE" # Заглушка, если переменная не подтянется
+    BOT_TOKEN = "ТВОЙ_ТОКЕН_ОТ_BOTFATHER" # <-- ВСТАВЬ СВОЙ ТОКЕН СЮДА
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -34,6 +34,15 @@ async def cmd_start(message: types.Message):
         [InlineKeyboardButton(text="💎 Премиум эмодзи (2 ⭐️)", callback_data="premium_menu")]
     ])
     await message.answer("Привет! Я бот для создания кастомных эмодзи. Выбери нужный раздел:", reply_markup=kb)
+
+# НОВЫЙ ОБРАБОТЧИК: Реакция на текстовую команду /premium
+@dp.message(Command("premium"))
+async def cmd_premium_text(message: types.Message):
+    buttons = []
+    for key, data in PREMIUM_EMOJIS.items():
+        buttons.append([InlineKeyboardButton(text=f"{data['title']} - 2 ⭐️", callback_data=f"buy_prem_{key}")])
+    kb = InlineKeyboardMarkup(inline_keyboard=buttons)
+    await message.answer("✨ Выбери анимированный премиум эмодзи:", reply_markup=kb)
 
 @dp.callback_query(F.data == "buy_basic")
 async def process_basic(callback: types.CallbackQuery):
